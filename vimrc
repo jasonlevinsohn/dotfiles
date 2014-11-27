@@ -1,6 +1,8 @@
 if $SHELL =~ 'bin/fish'
     set shell=/bin/bash
 endif
+
+
                     
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -63,6 +65,9 @@ Bundle 'bling/vim-airline'
 " JSLint
 Bundle 'wookiehangover/jshint.vim'
 
+" Git Gutter - shows commit diffs in the gutter.
+Bundle 'airblade/vim-gitgutter'
+
 
 
 "First scheme: colorscheme zenburn
@@ -74,10 +79,10 @@ Bundle 'wookiehangover/jshint.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
-" filetype plugin indent on    " required
+filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
-filetype plugin on
-set omnifunc=syntaxcomplete#Complete
+" filetype plugin on
+" set omnifunc=syntaxcomplete#Complete
 "
 " Brief help
 " :PluginList          - list configured plugins
@@ -103,7 +108,8 @@ set expandtab " use spaces instead of tabs.
 set smarttab " let's tab key insert 'tab stops', and bksp deletes tabs.
 set shiftround " tab / shifting moves to closest tabstop.
 set autoindent " Match indents on new lines.
-"set smartindent " Intellegently dedent / indent new lines based on rules. is apparently not that smart, files have rules already.
+set nosmartindent
+" set smartindent " Intellegently dedent / indent new lines based on rules. is apparently not that smart, files have rules already.
 set noswapfile "Nobody likes a swap file
 set completeopt-=preview "Don't show preview window when running SimpleJSON in Django
 
@@ -146,6 +152,9 @@ let mapleader=","
 inoremap jf <esc>
 
 " Task Specific Shortcuts
+" inoremap <c-j> __jlev___<left><left>
+" inoremap <c-k> mdl.translateText('')<left><left>
+" inoremap <c-l> data-i18n=""<left>
 inoremap <c-c> console.log('');<left><left><left>
 inoremap <c-v> console.dir('');<left><left><left>
 
@@ -228,10 +237,11 @@ inoremap <c-z> <esc>mzgUiw`za
 
 " Dash
     let g:dash_map = {
-        \ 'python'  : 'python2'
+        \ 'javascript' : 'angularjs'
         \ }
     nmap <leader>d <Plug>DashSearch
     vmap <leader>d <Plug>DashSearch
+
 
 
 " Tabular 
