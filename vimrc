@@ -34,7 +34,7 @@ Bundle 'tpope/vim-commentary'
 Bundle 'mattn/emmet-vim'
 
 " Bundle 'mattn/zencoding-vim'
-" Bundle 'scrooloose/syntastic'
+Bundle 'scrooloose/syntastic'
 
 " Automatic closing of quotes, tags, parenths, and brackets
 Bundle 'Raimondi/delimitMate'
@@ -63,12 +63,13 @@ Bundle 'elzr/vim-json'
 Bundle 'bling/vim-airline'
 
 " JSLint
-Bundle 'wookiehangover/jshint.vim'
+" Bundle 'wookiehangover/jshint.vim'
 
 " Git Gutter - shows commit diffs in the gutter.
-Bundle 'airblade/vim-gitgutter'
-
-
+" Bundle 'airblade/vim-gitgutter'
+"
+" TypeScript
+Bundle 'leafgarland/typescript-vim'
 
 "First scheme: colorscheme zenburn
 " colorscheme wuye
@@ -100,6 +101,8 @@ filetype plugin indent on    " required
 " Default tabstop / spacing
 "
 syntax on
+" au BufNewFile,BufRead *.ts set filetype=ipt
+
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
@@ -167,6 +170,9 @@ noremap L g_
 " Shortcut for sorting
 vnoremap <leader>s :sort<cr>
 
+" Shortcut for viewing old files
+nnoremap <leader>o :browse oldfiles<cr>
+
 "Turned off Arrow Keys to force myself to use home row key navigation
 " nnoremap <up> <Nop>
 " nnoremap <down> <Nop>
@@ -195,8 +201,8 @@ nnoremap <leader><space> :noh<cr>
 
 
 "Increase/decrease size of vsplit windows
-nnoremap <c-o> :vertical resize +10<cr>
-nnoremap <c-i> :vertical resize -10"<cr>
+nnoremap <c-o> :vertical resize +15<cr>
+nnoremap <c-i> :vertical resize -15"<cr>
 
 "Shows invisible characters
 "set list
@@ -270,12 +276,36 @@ inoremap <c-z> <esc>mzgUiw`za
     let g:ctrlp_map = '<c-t>'
     let g:ctrlp_max_height = 30
 
+    " For Wall-E Project, ignore some directories
+    " Directories: /analysis /node_modules /build
+    let g:ctrlp_custom_ignore = '\v[\/](node_modules|analysis|build)$'
+
 " Syntastic {{{
 
     " let g:syntastic_enable_signs = 1
     " let g:syntastic_disabled_filetypes = ['html', 'py']
     " let g:syntastic_stl_format = '[%E{%e Errors}%B{, }%W{%w Warnings}]'
     " let g:syntastic_jsl_conf = '$HOME/.vim/jsl.conf'
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
+
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_wq = 0
+
+    let g:syntastic_javascript_checkers = ['eslint']
+    let g:syntastic_typescript_checkers = ['tslint']
+
+    " Default html checker is tidy.  It doesn't play nice with angular so...
+    let g:syntastic_html_checkers = []
+
+    let g:syntastic_html_tidy_ignore_errors = [
+        \ 'proprietary attribute "ng-',
+        \ 'proprietary attribute "dl-',
+        \ '<form> proprietary attribute "novalidate"'
+    \ ] 
 
 " }}}
 
@@ -294,8 +324,15 @@ inoremap <c-z> <esc>mzgUiw`za
 " }}}
 "
 " YouCompleteMe {{{
-    let g:ycm_autoclose_preview_window_after_completion = 1
+    " let g:ycm_autoclose_preview_window_after_completion = 1
+    let g:ycm_min_num_of_chars_for_completion               = 2
+    let g:ycm_auto_trigger                                  = 1
+    let g:ycm_collect_identifiers_from_tags_files           = 1
+    let g:ycm_autoclose_preview_window_after_completion     = 1
+    let g:ycm_autoclose_preview_window_after_insertion      = 1
+    let g:ycm_collect_identifiers_from_comments_and_strings = 1
 
+    autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 " }}}
 
@@ -309,3 +346,13 @@ inoremap <c-z> <esc>mzgUiw`za
         
 
 " }}} - End Plug-in Manager
+
+
+" slow multiple_cursors & YCM
+function! Multiple_cursors_before()
+    let g:ycm_auto_trigger = 0
+endfunction
+ 
+function! Multiple_cursors_after()
+    let g:ycm_auto_trigger = 1
+endfunction
